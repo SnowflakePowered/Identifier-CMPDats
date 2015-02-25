@@ -41,7 +41,7 @@ namespace Identifier.CMPDats
         }
         public override string IdentifyGame(FileStream file, string platformId)
         {
-            string crc32 = GetCrc32(file);
+            string crc32 = Snowflake.Utility.FileHash.GetCRC32(file);
             file.Close();
             List<object> datFiles = this.PluginConfiguration.Configuration["dats"][platformId];
 
@@ -55,13 +55,6 @@ namespace Identifier.CMPDats
             string gameName = Regex.Match(match.Value, @"(\[[^]]*\])*([\w\s]+)").Groups[2].Value;
             
             return gameName;
-        }
-
-        private string GetCrc32(FileStream file)
-        {
-            using (var crc32 = new Crc32())
-            return BitConverter.ToString(crc32.ComputeHash(file)).Replace("-", String.Empty).ToLowerInvariant();
-
         }
     }
 }
