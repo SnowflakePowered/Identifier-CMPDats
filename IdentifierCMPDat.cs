@@ -52,7 +52,7 @@ namespace Identifier.CMPDats
                             RegexOptions.IgnoreCase))
                             .First(gameMatch => gameMatch.Success);
      
-            string gameName = Regex.Match(match.Value, @"(\[[^]]*\])*([\w\s]+)").Groups[2].Value;
+            string gameName = Regex.Match(match.Value, @"(\[[^]]*\])*([\w\s.+]+)").Groups[2].Value;
             
             return gameName;
         }
