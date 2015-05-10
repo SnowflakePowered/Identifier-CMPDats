@@ -51,9 +51,16 @@ namespace Identifier.CMPDats
                         Regex.Match(datFile, String.Format(@"(?<=rom \( name "").*?(?="" size \d+ crc {0})", crc32),
                             RegexOptions.IgnoreCase))
                             .First(gameMatch => gameMatch.Success);
-     
-            string gameName = Regex.Match(match.Value, @"(\[[^]]*\])*([\w\s.+]+)").Groups[2].Value;
-            
+
+            //Get the ROM name without extension
+            string gameName = Path.GetFileNameWithoutExtension(match.Value);
+
+            //Magical regex that removes anything in square brackets and parentheses, taking out GoodTools and NoIntro tags
+            //Also preserves common punctuation (+, -, ~, !, ?, ,, ;, $, %, ^, &, *, @, #, ", ') found in game titles.
+            //Should be accurate for most cases
+            var cleanMatch = Regex.Match(match.Value, @"(\([^]]*\))*(\[[^]]*\])*([\w\+\~\@\!\#\$\%\^\&\*\;\,\'\""\?\-\.\-\s]+)");
+            gameName = cleanMatch.Groups[3].Value;
+      
             return gameName;
         }
     }
